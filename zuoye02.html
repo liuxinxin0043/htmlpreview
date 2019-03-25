@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form action="">
+        <input type="search" value="请输入想查找的商品" id="putin" 
+        style="height: 40px; width: 200px; border-color: chocolate;">
+        <input type="button" value="搜索" id="search" onclick="saveStorage('putin');"
+        style="height: 35px;width: 150px;" >
+    </form>
+    <p>最近搜索</p>
+    <div style="width: 370px;" id="show"></div>
+        <h1 style="display:block;margin-left: 100px;margin-top:100px;" id="no">无搜索记录</h1>
+    </div>
+    <button id="delet" style="margin-left:375px;">X</button>
+    
+    <script>
+        var show = document.getElementById('show');
+        var delet = document.getElementById('delet');
+        var no=document.getElementById('no');
+        function saveStorage(id){
+            if(!window.localStorage){
+				alert("你的浏览器不支持localstorage");
+			}
+            else{
+                var text1=document.getElementById(id).value;     
+                var time = new Date().getTime();
+                localStorage.setItem(time, text1);
+                showStorage();
+                no.style.display="none";
+            }
+        }
+        function showStorage(){
+            var flag;
+            var button1=''; 
+            for (var i = 0; i < localStorage.length; i++) {
+                var key = localStorage.key(i);
+                var value = localStorage.getItem(key); 
+                for(var j=0;j<localStorage.length;j++){
+                    if(value==localStorage.getItem(localStorage.key(j))&&i!=j){
+                        localStorage.removeItem(localStorage(key(j)));
+                    }
+                }
+                button1+="<button>"+value+"</button>"+"&nbsp;";                             
+            }
+            show.innerHTML = button1;
+        }
+       
+        delet.onclick = function(){
+            localStorage.clear();
+            alert("是否清楚全部记录?");
+            showStorage();
+            no.style.display="block";
+        }
+    </script>
+</body>
+</html>
