@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    #results{
+        width: 230px;
+        height: 100px;
+        color:rgb(190, 3, 41);
+        border: 1px black solid;
+        text-align: center;
+        line-height: 100px;;
+        position: absolute;
+        font-size: 40px;
+    }
+    #canvas{
+        position: absolute;
+    }
+</style>
+<body>
+    <div id="results"></div>
+    <canvas id="canvas" width="230px" height="100px"></canvas>
+    <script>
+        //随机文字
+        var results= document.getElementById('results');
+        var result = new Array("谢谢参与","一等奖","二等奖","幸运奖","特别奖");
+        results.innerHTML = result[Math.floor(Math.random()*5)]; 
+
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext('2d');
+        context.fillStyle = 'gray';
+        context.fillRect(0,0,230,100);
+        context.globalCompositeOperation = 'destination-out';
+
+        canvas.onmousedown = function(){
+            canvas.onmousemove=function(e){
+                var ev = ev || event;
+                var x = ev.clientX;
+                var y = ev.clientY;
+                ev.preventDefault();  
+                context.beginPath();
+                context.arc(x - canvas.offsetLeft,y - canvas.offsetTop,10,0,Math.PI*2);
+                context.closePath();
+                context.fillStyle="white";
+                context.fill();
+                var imgData = context.getImageData(0, 0, 230, 100);
+                var datas = imgData.data;
+                var length = datas.length;
+                var transparency = 0;
+                for (var i = 0; i < length; i += 4) {
+                    var a = datas[i + 3];
+                    if (a < 10)
+                        transparency++;
+                }
+                var percent= transparency / (length / 4);
+                if (percent > 0.85)
+                    context.clearRect(0,0,230,100);
+            };
+        }
+        
+
+    </script>
+</body>
+</html>
